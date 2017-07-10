@@ -9,7 +9,7 @@
     - **Command => npm install**
 - If you want to use [Bower](https://bower.io/) as package manager, Run these two commands in the project folder to setup bower.
     - **Command=> npm install -g bower**
-    - **Command=> bower init and save with defaul**
+    - **Command=> bower init and save with default**
 - Now to install any bower package run this commmand
     - **Command=> bower install <packagename> -S**
 
@@ -23,6 +23,7 @@
 - Add all the .scss file in source->sass
 - Add all the html partials file in source->template
 
+
 # Gulp Packages
 
 - **[gulp](https://www.npmjs.com/package/gulp):** The streaming build system
@@ -30,10 +31,8 @@
 - **[del](https://www.npmjs.com/package/del):** Delete files and folders
 - **[browser-sync](https://www.npmjs.com/package/browser-sync):** Live CSS Reload & Browser Syncing
 - **[gulp-nunjucks](https://www.npmjs.com/package/gulp-nunjucks):** HTML templating engine
-- **[gulp-htmlclean](https://www.npmjs.com/package/gulp-htmlclean):** Simple and safety HTML/SVG cleaner to minify without changing its structure.
 - **[gulp-sass](https://www.npmjs.com/package/gulp-sass):** Gulp plugin for sass
 - **[gulp-pleeease](https://www.npmjs.com/package/gulp-pleeease):** To add vendor prefixes automatically
-- **[gulp-compass](https://www.npmjs.com/package/gulp-compass):** To use compass mixins
 - **[gulp-imagemin](https://www.npmjs.com/package/gulp-imagemin):** Minify PNG, JPEG, GIF and SVG images
 - **[gulp-newer](https://www.npmjs.com/package/gulp-newer):** Only pass through newer source files
 - **[gulp-imacss](https://www.npmjs.com/package/gulp-imacss):** A gulp plugin for using imacss (the image to datauri to CSS transformer) to avoid http calls
@@ -51,12 +50,11 @@
 
 # Gulp Tasks
 
-
 - **watch:** Runs all the tasks automatically and waits for any change
 - **cleanBuild:** Cleans the build folder
 - **browsersync:** For reload and mobile testing
 - **html:** To merge the html partials and output the complete html files
-- **sass:** Changes inline images to data uri and complies sass to css
+- **sass:** Complies sass to css
 - **images:** Minimizes, copies new images into build folder
 - **imageuri:** Change inline images to data uri
 - **fonts:** Copies new font files to build folder

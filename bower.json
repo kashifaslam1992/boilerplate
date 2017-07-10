@@ -1,12 +1,12 @@
 {
-  "name": "boilerplate",
+  "name": "starter",
   "description": "",
   "main": "build/index.html",
   "authors": [
-    "Kashif <kashif.1992@yahoo.com>"
+    "coeus-kashifaslam <kashif.aslam@coeus-solutions.de>"
   ],
   "license": "ISC",
-  "homepage": "https://github.com/kashifaslam1992/boilerplate",
+  "homepage": "https://github.com/coeus-kashifaslam/starter",
   "private": true,
   "ignore": [
     "**/.*",
