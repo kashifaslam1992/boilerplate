@@ -18,8 +18,10 @@
 
 	sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
+    sourcemaps = require('gulp-sourcemaps'),
 
-	jshint = require('gulp-jshint'),
+
+    jshint = require('gulp-jshint'),
 	concat = require('gulp-concat'),
 	stripdebug = require('gulp-strip-debug'),
 	uglify = require('gulp-uglify'),
@@ -165,8 +167,10 @@ gulp.task('htmlValidate', function(){
  */
 gulp.task('sass', function(){
 	return gulp.src(styles.in)
-    .pipe(autoprefixer(autoprefixerOptions))
-	.pipe(sass(sassOptions))
+	.pipe(sourcemaps.init())
+	.pipe(sass(sassOptions).on('error', sass.logError))
+	.pipe(sourcemaps.write())
+	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(gulp.dest(styles.out))
 	.pipe(browsersync.reload({stream: true}));
 });
