@@ -17,10 +17,7 @@
 	w3cjs = require('gulp-w3cjs'),
 
 	sass = require('gulp-sass'),
-	pleeease = require('gulp-pleeease'),
-	csscomb = require ('gulp-csscomb'),
-	iconfont = require('gulp-iconfont'),
-	iconfontCss = require('gulp-iconfont-css'),
+    autoprefixer = require('gulp-autoprefixer'),
 
 	jshint = require('gulp-jshint'),
 	concat = require('gulp-concat'),
@@ -50,14 +47,11 @@
  		indentWidth: 4
  	},
 
- 	pleeeaseOptions = {
+    autoprefixerOptions = {
  		autoprefixer: {
  			browsers: ['> 2%','last 3 versions'],
  			cascade: false
- 		},
- 		pseudoElements: true,
- 		mqpacker: true,
- 		opacity: true
+ 		}
  	},
 
  	browsersyncOptions = {
@@ -67,24 +61,6 @@
 		},
 		open: true,
 		notify: true
-	},
-
-	iconfontName = 'fontName',
-	iconfontcssOptions = {
-		fontName: iconfontName,
-		path: source + 'iconfont/template/_icons.css',
-		targetPath: 'scss/_icons.css',
-		fontPath: 'iconfont/fonts/'
-	},
-
-	iconfontOptions = {
-		fontName: iconfontName,
-		appendCodepoints: true,
-		appendUnicode: false,
-		centerHorizontally: true,
-		formats: ['svg', 'ttf', 'eot', 'woff', 'woff2'],
-		normalize: true,
-		fontHeight: 1001
 	},
 
 /*
@@ -120,10 +96,6 @@
 		in: [source + 'images/*.*', source + 'images/**/*.*'],
 		out: destination + 'images/'
 	},
-	svgs = {
-		in: source + 'svg/**/*.svg',
-		out: source + 'iconfont/'
-	},
 
 	fonts = {
 		in: source + 'fonts/**/*',
@@ -132,7 +104,7 @@
 
 	watch = {
 		html: [source + '*.html', source + 'template/**/*.html'],
-		sass: [source + 'sass/**/*.scss', '!' + imageuri.out + imageuri.filename],
+		sass: [source + 'sass/**/*.scss'],
 		fonts: [source + 'fonts/*'],
 		images: [source + 'images/*.*', source + 'images/**/*.*'],
 		scripts: [source + 'js/*.js', source + 'js/**/*.js']
@@ -161,19 +133,6 @@ gulp.task('cleanBuild', function(){
  */
 gulp.task('browsersync', function(){
 	browsersync(browsersyncOptions);
-});
-
-
-/*
- * Task Create css Icons from Svg files
- * ...
- */
-gulp.task('iconfont', function(){
-	return gulp
-	.src(svgs.in)
-	.pipe(iconfontCss(iconfontcssOptions))
-	.pipe(iconfont(iconfontOptions))
-	.pipe(gulp.dest(svgs.out));
 });
 
 /*
@@ -206,8 +165,7 @@ gulp.task('htmlValidate', function(){
  */
 gulp.task('sass', function(){
 	return gulp.src(styles.in)
-	.pipe(pleeease(pleeeaseOptions))
-	// .pipe(csscomb())
+    .pipe(autoprefixer(autoprefixerOptions))
 	.pipe(sass(sassOptions))
 	.pipe(gulp.dest(styles.out))
 	.pipe(browsersync.reload({stream: true}));
