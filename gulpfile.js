@@ -12,12 +12,10 @@ var gulp = require('gulp'),
     del = require('del'),
     browserSync = require("browser-sync").create(),
     newer = require('gulp-newer'),
-
     sass = require('gulp-sass'),
     postcss = require("gulp-postcss"),
     autoprefixer = require('autoprefixer'),
     sourcemaps = require('gulp-sourcemaps'),
-
     plumber = require('gulp-plumber'),
 
 
@@ -56,6 +54,7 @@ var gulp = require('gulp'),
         notify: true
     },
 
+
     /*
      * Source and Destination Assets
      * ...
@@ -70,7 +69,7 @@ var gulp = require('gulp'),
         out: destination + 'css/'
     },
 
-    cssSource = {
+    scssSource = {
         in: source + 'sass/**/*',
         out: destination + 'sass/'
     },
@@ -112,7 +111,7 @@ function cleanBuild() {
 function nunjucks() {
 	return gulp.src(html.in)
     .pipe(nunjucksRender({
-        path: [source+'/html/'] // String or Array
+        path: [source + 'html/'] // String or Array
     }))
 	.pipe(gulp.dest(html.out));
 }
@@ -140,8 +139,8 @@ function typography() {
 }
 
 function sassCopy() {
-    return gulp.src(cssSource.in)
-        .pipe(gulp.dest(cssSource.out));
+    return gulp.src(scssSource.in)
+        .pipe(gulp.dest(scssSource.out));
 }
 
 function js() {
@@ -157,7 +156,13 @@ function watch() {
     gulp.watch(watcher.scripts, js);
     gulp.watch(watcher.images, graphics);
     gulp.watch(watcher.fonts, typography);
-    gulp.watch([html.out + '*.html', css.out + '*.css', scripts.out + '*.js', images.out + '*', fonts.out + '*']).on('change', browserSync.reload);
+    gulp.watch([
+        html.out + '*.html',
+        css.out + '*.css',
+        scripts.out + '*.js',
+        images.out + '*',
+        fonts.out + '*'
+    ]).on('change', browserSync.reload);
 }
 
 exports.cleanBuild = cleanBuild;
