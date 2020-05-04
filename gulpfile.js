@@ -9,6 +9,9 @@
 
 var gulp = require('gulp'),
     nunjucksRender = require('gulp-nunjucks-render'),
+    htmlbeautify = require('gulp-html-beautify'),
+    removeEmptyLines = require('gulp-remove-empty-lines'),
+    removeHtmlComments = require('gulp-remove-html-comments'),
     del = require('del'),
     browserSync = require("browser-sync").create(),
     newer = require('gulp-newer'),
@@ -113,7 +116,10 @@ function nunjucks() {
     .pipe(nunjucksRender({
         path: [source + 'html/'] // String or Array
     }))
-	.pipe(gulp.dest(html.out));
+    //.pipe(removeHtmlComments())
+    .pipe(removeEmptyLines())
+    .pipe(htmlbeautify({"indent_size": 2}))
+    .pipe(gulp.dest(html.out));
 }
 
 function style() {
