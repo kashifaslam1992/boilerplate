@@ -7,6 +7,7 @@
  */
 import gulp from 'gulp';
 import yargs from 'yargs'; //TO set flag in command line wiht --prod flag
+//import gulpif from 'gulp-if';
 import nunjucksRender from 'gulp-nunjucks-render';
 import htmlbeautify from 'gulp-html-beautify';
 import removeEmptyLines from 'gulp-remove-empty-lines';
@@ -22,6 +23,7 @@ import plumber from 'gulp-plumber';
 
 const serve = browserSync.create(),
     PRODUCTION = yargs.argv.prod,
+
     /*
      * Soruce and Destination Folders
      * ...
@@ -123,7 +125,7 @@ export const style = () => {
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions)).on('error', sass.logError)
         .pipe(postcss([autoprefixer(autoprefixerOptions)]))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(css.out))
         .pipe(serve.stream());
 };
