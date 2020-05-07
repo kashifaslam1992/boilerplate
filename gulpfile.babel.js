@@ -1,4 +1,3 @@
-
 /************************************/
 /* 				Tasks				*/
 /************************************/
@@ -6,27 +5,26 @@
  * Gulp Libraries
  * ...
  */
+import gulp from 'gulp';
+import nunjucksRender from 'gulp-nunjucks-render';
+import htmlbeautify from 'gulp-html-beautify';
+import removeEmptyLines from 'gulp-remove-empty-lines';
+//import removeHtmlComments from 'gulp-remove-html-comments';
+import del from 'del';
+import browserSync from 'browser-sync';
+import newer from 'gulp-newer';
+import sass from 'gulp-sass';
+import postcss from 'gulp-postcss';
+import autoprefixer from 'autoprefixer';
+import sourcemaps from 'gulp-sourcemaps';
+import plumber from 'gulp-plumber';
 
-var gulp = require('gulp'),
-    nunjucksRender = require('gulp-nunjucks-render'),
-    htmlbeautify = require('gulp-html-beautify'),
-    removeEmptyLines = require('gulp-remove-empty-lines'),
-    removeHtmlComments = require('gulp-remove-html-comments'),
-    del = require('del'),
-    browserSync = require("browser-sync").create(),
-    newer = require('gulp-newer'),
-    sass = require('gulp-sass'),
-    postcss = require("gulp-postcss"),
-    autoprefixer = require('autoprefixer'),
-    sourcemaps = require('gulp-sourcemaps'),
-    plumber = require('gulp-plumber'),
-
-
+const serve = browserSync.create();
     /*
      * Soruce and Destination Folders
      * ...
      */
-    source = 'src/',
+const source = 'src/',
     destination = 'dist/',
 
 
@@ -104,14 +102,10 @@ var gulp = require('gulp'),
     };
 
 
-function cleanBuild() {
-    return del([
-        destination + '*'
-    ]);
-}
+export const cleanBuild = () => del([destination + '*']);
 
 
-function nunjucks() {
+export const nunjucks = () => {
 	return gulp.src(html.in)
     .pipe(nunjucksRender({
         path: [source + 'html/'] // String or Array
@@ -120,43 +114,43 @@ function nunjucks() {
     .pipe(removeEmptyLines())
     .pipe(htmlbeautify({"indent_size": 2}))
     .pipe(gulp.dest(html.out));
-}
+};
 
-function style() {
+export const style = () => {
     return gulp.src(css.in)
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions)).on('error', sass.logError)
         .pipe(postcss([autoprefixer(autoprefixerOptions)]))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(css.out))
-        .pipe(browserSync.stream());
-}
+        .pipe(serve.stream());
+};
 
-function graphics() {
+export const graphics = () => {
     return gulp.src(images.in)
         .pipe(newer(images.out))
         .pipe(gulp.dest(images.out));
-}
+};
 
-function typography() {
+export const typography = () => {
     return gulp.src(fonts.in)
         .pipe(newer(fonts.out))
         .pipe(gulp.dest(fonts.out));
-}
+};
 
-function sassCopy() {
+export const sassCopy = () => {
     return gulp.src(scssSource.in)
         .pipe(gulp.dest(scssSource.out));
-}
+};
 
-function js() {
+export const js = () => {
     return gulp.src(scripts.in)
         .pipe(plumber())
         .pipe(gulp.dest(scripts.out));
-}
+};
 
-function watch() {
-    browserSync.init(browsersyncOptions);
+export const watch = () => {
+    serve.init(browsersyncOptions);
     gulp.watch(watcher.sass, gulp.series([style, sassCopy]));
     gulp.watch(watcher.html, nunjucks);
     gulp.watch(watcher.scripts, js);
@@ -168,18 +162,22 @@ function watch() {
         scripts.out + '*.js',
         images.out + '*',
         fonts.out + '*'
-    ]).on('change', browserSync.reload);
-}
-
-exports.cleanBuild = cleanBuild;
-exports.nunjucks = nunjucks;
-exports.style = style;
-exports.graphics = graphics;
-exports.typography = typography;
-exports.sassCopy = sassCopy;
-exports.js = js;
+    ]).on('change', serve.reload);
+};
 
 
-var build = gulp.parallel(watch);
+export const init = (done) => {
+    gulp.series(
+        'nunjucks',
+        'style',
+        'graphics',
+        'typography',
+        'sassCopy',
+        'js'
+    )() ;
+    done();
+};
 
-gulp.task('default', build);
+const build = gulp.series(init, watch);
+
+export default build;

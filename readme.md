@@ -21,8 +21,9 @@
 - **gulp:** Runs all the tasks automatically and waits for any change
 - **cleanBuild:** Cleans the build folder
 - **browsersync:** For reload and mobile testing
-- **html:** To merge the html partials and output the complete html files
-- **sass:** Complies sass to css
-- **images:** Minimizes, copies new images into build folder
-- **fonts:** Copies new font files to build folder
-- **scripts:** Copies and debugs the script files
+- **nunjucks:** To merge the html partials and output the complete html files
+- **style:** Complies sass to css
+- **graphics:** Minimizes, copies new images into build folder
+- **typography:** Copies new font files to build folder
+- **sassCopy:** Copies scss files to build->scss folder
+- **js:** Copies and debugs the script files
