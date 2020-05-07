@@ -27,3 +27,7 @@
 - **typography:** Copies new font files to build folder
 - **sassCopy:** Copies scss files to build->scss folder
 - **js:** Copies and debugs the script files
+
+
+# Pass Flag with Gulp Task
+- Set Flag to True: **gulp --prod=true**

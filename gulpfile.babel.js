@@ -6,6 +6,7 @@
  * ...
  */
 import gulp from 'gulp';
+import yargs from 'yargs'; //TO set flag in command line wiht --prod flag
 import nunjucksRender from 'gulp-nunjucks-render';
 import htmlbeautify from 'gulp-html-beautify';
 import removeEmptyLines from 'gulp-remove-empty-lines';
@@ -19,12 +20,13 @@ import autoprefixer from 'autoprefixer';
 import sourcemaps from 'gulp-sourcemaps';
 import plumber from 'gulp-plumber';
 
-const serve = browserSync.create();
+const serve = browserSync.create(),
+    PRODUCTION = yargs.argv.prod,
     /*
      * Soruce and Destination Folders
      * ...
      */
-const source = 'src/',
+    source = 'src/',
     destination = 'dist/',
 
 
