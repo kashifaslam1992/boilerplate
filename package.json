@@ -4,7 +4,8 @@
   "description": "",
   "main": "build/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp",
+    "build": "gulp build --prod"
   },
   "author": "",
   "license": "ISC",
@@ -12,22 +13,20 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.9.0",
-    "gulp-if": "^3.0.0",
-    "yargs": "^15.3.1"
-  },
-  "dependencies": {
     "autoprefixer": "^9.7.6",
+    "babel-loader": "^8.1.0",
     "browser-sync": "^2.26.7",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-html-beautify": "^1.0.1",
-    "gulp-newer": "^1.4.0",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "^7.1.0",
     "gulp-nunjucks-render": "^2.2.3",
-    "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^8.0.0",
     "gulp-remove-empty-lines": "^0.1.0",
-    "gulp-remove-html-comments": "^1.0.1",
     "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5"
+    "gulp-sourcemaps": "^2.6.5",
+    "webpack-stream": "^5.2.1",
+    "yargs": "^15.3.1"
   }
 }

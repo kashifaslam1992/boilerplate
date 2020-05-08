@@ -1,187 +1,162 @@
-/************************************/
-/* 				Tasks				*/
-/************************************/
-/*
- * Gulp Libraries
- * ...
- */
+// General
 import gulp from 'gulp';
-import yargs from 'yargs'; //TO set flag in command line wiht --prod flag
-//import gulpif from 'gulp-if';
+import yargs from 'yargs';
+import gulpif from 'gulp-if';
+import del from 'del';
+import browserSync from 'browser-sync';
+
+// HTML
 import nunjucksRender from 'gulp-nunjucks-render';
 import htmlbeautify from 'gulp-html-beautify';
 import removeEmptyLines from 'gulp-remove-empty-lines';
-//import removeHtmlComments from 'gulp-remove-html-comments';
-import del from 'del';
-import browserSync from 'browser-sync';
-import newer from 'gulp-newer';
+
+// CSS
 import sass from 'gulp-sass';
 import postcss from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
 import sourcemaps from 'gulp-sourcemaps';
-import plumber from 'gulp-plumber';
+
+// Javascript
+import webpack from 'webpack-stream';
+
+// Images
+import imagemin from 'gulp-imagemin';
 
 const serve = browserSync.create(),
     PRODUCTION = yargs.argv.prod,
-
-    /*
-     * Soruce and Destination Folders
-     * ...
-     */
-    source = 'src/',
-    destination = 'dist/',
-
-
-    /*
-     * Options List
-     * ...
-     */
-
-    sassOptions = {
-        errToLogConsole: true,
-        precision: 4,
-        outputStyle: 'expanded',
-        sourceComments: false,
-        indentWidth: 4
-    },
-
-    autoprefixerOptions = {
-        overrideBrowserslist: ['> 2%','last 3 versions'],
-        cascade: false
-    },
-
-    browsersyncOptions = {
-        server: {
-            baseDir: destination,
-            index: 'index.html'
+    src = 'src/',
+    dist = 'dist/',
+    option = {
+        sass: {
+            errToLogConsole: true,
+            precision: 4,
+            outputStyle: 'expanded',
+            sourceComments: false,
+            indentWidth: 4
         },
-        open: true,
-        notify: true
+        autoprefixer: {
+            overrideBrowserslist: ['> 2%','last 3 versions'],
+            cascade: false
+        },
+        browsersync: {
+            server: {
+                baseDir: dist,
+                index: 'index.html'
+            },
+            open: true,
+            notify: true
+        }
     },
+    path = {
+        html : {
+            in: src + 'html/*.html',
+            out: dist,
+            watch: [src + 'html/*.html', src + 'html/**/*.html']
+        },
+        css : {
+            in: src + 'sass/*.scss',
+            out: dist + 'css/',
+            watch: src + 'sass/**/*.scss'
+        },
+        scripts : {
+            in: src + 'js/script.js',
+            out: dist + 'js/',
+            watch: [src + 'js/*.js', src + 'js/**/*.js']
+        },
+        images : {
+            in: [src + 'images/*.*', src + 'images/**/*.*'],
+            out: dist + 'images/',
+            watch: [src + 'images/*.*', src + 'images/**/*.*']
+        },
+        others: {
+            src: src + '{images,js,assets}/**/*',
+            dist: dist
+        }
 
-
-    /*
-     * Source and Destination Assets
-     * ...
-     */
-    html = {
-        in: source + 'html/*.html',
-        out: destination
-    },
-
-    css = {
-        in: source + 'sass/*.scss',
-        out: destination + 'css/'
-    },
-
-    scssSource = {
-        in: source + 'sass/**/*',
-        out: destination + 'sass/'
-    },
-
-    scripts = {
-        in: [
-            // Add All vendor paths here
-            source + 'js/*.js'
-        ],
-        out: destination + 'js/'
-    },
-
-    images = {
-        in: [source + 'images/*.*', source + 'images/**/*.*'],
-        out: destination + 'images/'
-    },
-
-    fonts = {
-        in: source + 'fonts/**/*',
-        out: destination + 'fonts/'
-    },
-
-    watcher = {
-        html: [source + '*.html', source + 'html/*.html', source + 'html/**/*.html'],
-        sass: [source + 'sass/**/*.scss'],
-        fonts: [source + 'fonts/*'],
-        images: [source + 'images/*.*', source + 'images/**/*.*'],
-        scripts: [source + 'js/*.js', source + 'js/**/*.js']
     };
 
+export const clean = () => del([dist]);
+export const copy = () => {
+    return gulp.src(path.others.src)
+        .pipe(gulp.dest(path.others.dist))
+}
 
-export const cleanBuild = () => del([destination + '*']);
 
-
-export const nunjucks = () => {
-	return gulp.src(html.in)
+export const html = () => {
+	return gulp.src(path.html.in)
     .pipe(nunjucksRender({
-        path: [source + 'html/'] // String or Array
+        path: [src + 'html/'] // String or Array
     }))
-    //.pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
     .pipe(htmlbeautify({"indent_size": 2}))
-    .pipe(gulp.dest(html.out));
+    .pipe(gulp.dest(path.html.out));
 };
 
-export const style = () => {
-    return gulp.src(css.in)
+export const styles = () => {
+    return gulp.src(path.css.in)
         .pipe(sourcemaps.init())
-        .pipe(sass(sassOptions)).on('error', sass.logError)
-        .pipe(postcss([autoprefixer(autoprefixerOptions)]))
+        .pipe(sass(option.sass)).on('error', sass.logError)
+        .pipe(postcss([autoprefixer(option.autoprefixer)]))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(css.out))
+        .pipe(gulp.dest(path.css.out))
         .pipe(serve.stream());
 };
 
-export const graphics = () => {
-    return gulp.src(images.in)
-        .pipe(newer(images.out))
-        .pipe(gulp.dest(images.out));
+export const images = () => {
+    return gulp.src(path.images.in)
+        .pipe(gulpif(PRODUCTION, imagemin()))
+        .pipe(gulp.dest(path.images.out));
 };
 
-export const typography = () => {
-    return gulp.src(fonts.in)
-        .pipe(newer(fonts.out))
-        .pipe(gulp.dest(fonts.out));
-};
-
-export const sassCopy = () => {
-    return gulp.src(scssSource.in)
-        .pipe(gulp.dest(scssSource.out));
-};
-
-export const js = () => {
-    return gulp.src(scripts.in)
-        .pipe(plumber())
-        .pipe(gulp.dest(scripts.out));
+export const scripts = () => {
+    return gulp.src(path.scripts.in)
+        .pipe(webpack({
+            module: {
+                rules: [
+                    {
+                        test: /\.js$/,
+                        use: {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['@babel/preset-env'] //or ['babel-preset-env']
+                            }
+                        }
+                    }
+                ]
+            },
+            output: {
+                filename: 'bundle.js'
+            },
+            devtool: !PRODUCTION ? 'inline-source-map' : false,
+            mode: PRODUCTION ? 'production' : 'development' //add this
+        }))
+        .pipe(gulp.dest(path.scripts.out));
 };
 
 export const watch = () => {
-    serve.init(browsersyncOptions);
-    gulp.watch(watcher.sass, gulp.series([style, sassCopy]));
-    gulp.watch(watcher.html, nunjucks);
-    gulp.watch(watcher.scripts, js);
-    gulp.watch(watcher.images, graphics);
-    gulp.watch(watcher.fonts, typography);
+    serve.init(option.browsersync);
+    gulp.watch(path.css.watch, styles);
+    gulp.watch(path.html.watch, html);
+    gulp.watch(path.scripts.watch, scripts);
+    gulp.watch(path.images.watch, images);
+    gulp.watch(path.others.src, copy);
     gulp.watch([
-        html.out + '*.html',
-        css.out + '*.css',
-        scripts.out + '*.js',
-        images.out + '*',
-        fonts.out + '*'
+        path.html.out + '*.html',
+        path.css.out + '*.css',
+        path.scripts.out + '*.js',
+        path.images.out + '*'
     ]).on('change', serve.reload);
 };
 
 
-export const init = (done) => {
-    gulp.series(
-        'nunjucks',
-        'style',
-        'graphics',
-        'typography',
-        'sassCopy',
-        'js'
-    )() ;
+export const dev = (done) => {
+    gulp.series(clean, gulp.parallel(html, styles, images, scripts, copy), watch)()
     done();
 };
 
-const build = gulp.series(init, watch);
+export const build = (done) => {
+    gulp.series(clean, gulp.parallel(html, styles, images, scripts, copy))()
+    done();
+};
 
-export default build;
+export default dev;
