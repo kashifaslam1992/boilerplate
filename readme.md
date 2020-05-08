@@ -18,16 +18,11 @@
 
 # Gulp Tasks
 
-- **gulp:** Runs all the tasks automatically and waits for any change
-- **cleanBuild:** Cleans the build folder
-- **browsersync:** For reload and mobile testing
-- **nunjucks:** To merge the html partials and output the complete html files
-- **style:** Complies sass to css
-- **graphics:** Minimizes, copies new images into build folder
-- **typography:** Copies new font files to build folder
-- **sassCopy:** Copies scss files to build->scss folder
-- **js:** Copies and debugs the script files
-
-
-# Pass Flag with Gulp Task
-- Set Flag to True: **gulp --prod=true**
+- **npm run start:** Runs all the tasks automatically and waits for any change
+- **npm run build:** Runs gulp with --prod flag for minification
+- **clean:** Cleans the build folder
+- **html:** To merge the html partials and output the complete html files
+- **styles:** Complies sass to css
+- **images:** Minimizes, copies new images into build folder
+- **scripts:** Copies and debugs the script files
+- **copy:** Copies files to dist
