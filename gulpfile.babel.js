@@ -4,6 +4,7 @@ import yargs from 'yargs';
 import gulpif from 'gulp-if';
 import del from 'del';
 import browserSync from 'browser-sync';
+import zip from 'gulp-zip';
 
 // HTML
 import nunjucksRender from 'gulp-nunjucks-render';
@@ -18,6 +19,7 @@ import sourcemaps from 'gulp-sourcemaps';
 
 // Javascript
 import webpack from 'webpack-stream';
+import plumber from 'gulp-plumber';
 
 // Images
 import imagemin from 'gulp-imagemin';
@@ -59,6 +61,10 @@ const serve = browserSync.create(),
             watch: src + 'sass/**/*.scss'
         },
         scripts : {
+            in: [ src + 'js/*.js' ],
+            out: dist + 'js/'
+        },
+        scriptsES6 : {
             in: src + 'js/script.js',
             out: dist + 'js/',
             watch: [src + 'js/*.js', src + 'js/**/*.js']
@@ -69,8 +75,12 @@ const serve = browserSync.create(),
             watch: [src + 'images/*.*', src + 'images/**/*.*']
         },
         others: {
-            src: src + '{images,js,assets}/**/*',
+            src: src + '{images,js,assets,fonts,sass,scss}/**/*',
             dist: dist
+        },
+        theme: {
+            src: ['dist{,/**}'],
+            dist: 'theme'
         }
 
     };
@@ -81,6 +91,11 @@ export const copy = () => {
         .pipe(gulp.dest(path.others.dist))
 }
 
+export const compress = () => {
+    return gulp.src(path.theme.src)
+        .pipe(zip(`theme.zip`))
+        .pipe(gulp.dest(path.theme.dist));
+}
 
 export const html = () => {
 	return gulp.src(path.html.in)
@@ -110,6 +125,12 @@ export const images = () => {
 
 export const scripts = () => {
     return gulp.src(path.scripts.in)
+        .pipe(plumber())
+        .pipe(gulp.dest(path.scripts.out));
+};
+
+export const scriptsES6 = () => {
+    return gulp.src(path.scriptsES6.in)
         .pipe(webpack({
             module: {
                 rules: [
@@ -125,12 +146,12 @@ export const scripts = () => {
                 ]
             },
             output: {
-                filename: 'bundle.js'
+                filename: '[name].js'
             },
             devtool: !PRODUCTION ? 'inline-source-map' : false,
             mode: PRODUCTION ? 'production' : 'development' //add this
         }))
-        .pipe(gulp.dest(path.scripts.out));
+        .pipe(gulp.dest(path.scriptsES6.out));
 };
 
 export const watch = () => {
@@ -158,5 +179,10 @@ export const build = (done) => {
     gulp.series(clean, gulp.parallel(html, styles, images, scripts, copy))()
     done();
 };
+
+export const bundle = (done) => {
+    gulp.series(clean, gulp.parallel(html, styles, images, scripts, copy), compress)()
+    done();
+}
 
 export default dev;

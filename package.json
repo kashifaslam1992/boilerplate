@@ -5,7 +5,8 @@
   "main": "build/index.html",
   "scripts": {
     "start": "gulp",
-    "build": "gulp build --prod"
+    "build": "gulp build --prod",
+    "compress": "gulp bundle --prod"
   },
   "author": "",
   "license": "ISC",
@@ -22,10 +23,13 @@
     "gulp-if": "^3.0.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-nunjucks-render": "^2.2.3",
+    "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^8.0.0",
     "gulp-remove-empty-lines": "^0.1.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
+    "gulp-zip": "^5.0.1",
+    "vinyl-named": "^1.1.0",
     "webpack-stream": "^5.2.1",
     "yargs": "^15.3.1"
   }
