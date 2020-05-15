@@ -62,7 +62,8 @@ const serve = browserSync.create(),
         },
         scripts : {
             in: [ src + 'js/*.js' ],
-            out: dist + 'js/'
+            out: dist + 'js/',
+            watch: [ src + 'js/*.js' ]
         },
         scriptsES6 : {
             in: src + 'js/script.js',
@@ -79,7 +80,7 @@ const serve = browserSync.create(),
             dist: dist
         },
         theme: {
-            src: ['dist{,/**}'],
+            src: [dist + '{,/**}'],
             dist: 'theme'
         }
 
