@@ -184,6 +184,6 @@ export const build = (done) => {
 export const bundle = (done) => {
     gulp.series(clean, gulp.parallel(html, styles, images, scripts, copy), compress)()
     done();
-}
+};
 
 export default dev;

@@ -20,6 +20,7 @@
 
 - **npm run start:** Runs all the tasks automatically and waits for any change
 - **npm run build:** Runs gulp with --prod flag for minification
+- **npm run compress:** Runs gulp with --prod flag for minification and generates a zip file of dist folder
 - **clean:** Cleans the build folder
 - **html:** To merge the html partials and output the complete html files
 - **styles:** Complies sass to css
