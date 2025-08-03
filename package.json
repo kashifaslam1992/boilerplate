@@ -1,13 +1,13 @@
 {
-  "name": "Boilerplate",
-  "version": "2.0",
-  "description": "SASS compile|autoprefix|minimize|nunjucks-to-html and live-reload dev server using Browsersync",
+  "name": "boilerplate",
+  "version": "0.2.0",
+  "description": "SASS compile|autoprefixer|minimize|nunjucks-to-html and live-reload dev server using Browsersync",
   "main": "public/index.html",
   "author": "Kashif Aslam",
   "scripts": {
     "build:styles": "sass  --no-source-map src/styles :public/css",
     "build:html": "nunjucks-to-html \"src/*.{njk,html}\" --dest public --flatten",
-    "watch:html": "onchange \"src/**/*.{njk,html}\" \"src/*.{njk,html}\"' -- npm run build:html",
+    "watch:html": "onchange \"src/**/*.{njk,html}\" \"src/*.{njk,html}\" -- npm run build:html",
     "watch:sass": "sass  --no-source-map --watch src/styles:public/css",
     "copy:fonts": "copyfiles -u 1 ./src/fonts/**/* public",
     "copy:images": "copyfiles -u 1 ./src/images/**/* public",
