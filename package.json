@@ -1,0 +1,33 @@
+{
+  "name": "Boilerplate",
+  "version": "2.0",
+  "description": "SASS compile|autoprefix|minimize|nunjucks-to-html and live-reload dev server using Browsersync",
+  "main": "public/index.html",
+  "author": "Kashif Aslam",
+  "scripts": {
+    "build:styles": "sass  --no-source-map src/styles :public/css",
+    "build:html": "nunjucks-to-html \"src/*.{njk,html}\" --dest public --flatten",
+    "watch:html": "onchange \"src/**/*.{njk,html}\" \"src/*.{njk,html}\"' -- npm run build:html",
+    "watch:sass": "sass  --no-source-map --watch src/styles:public/css",
+    "copy:fonts": "copyfiles -u 1 ./src/fonts/**/* public",
+    "copy:images": "copyfiles -u 1 ./src/images/**/* public",
+    "copy:js": "copyfiles -u 1 ./src/js/**/* public",
+    "copy": "npm-run-all --parallel copy:*",
+    "watch": "npm-run-all --parallel watch:*",
+    "serve": "browser-sync start --server public --files public",
+    "start": "npm-run-all build:html copy --parallel watch serve",
+    "build": "npm-run-all copy build:*",
+    "postbuild": "postcss public/css/*.css -u autoprefixer cssnano -r --no-map"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.2",
+    "browser-sync": "^2.27.7",
+    "copyfiles": "^2.4.1",
+    "cssnano": "^5.0.17",
+    "npm-run-all": "^4.1.5",
+    "nunjucks-to-html": "^1.1.0",
+    "onchange": "^7.1.0",
+    "postcss-cli": "^9.1.0",
+    "sass": "^1.49.8"
+  }
+}
